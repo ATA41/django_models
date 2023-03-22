@@ -1,0 +1,73 @@
+
+(venv) C:\Users\ataja\Desktop\FLASK ALL\django_models>python manage.py makemigrations
+Migrations for 'restaurant':
+  restaurant\migrations\0001_initial.py
+    - Create model Client
+    - Create model Food
+    - Create model Ingredient
+    - Create model User
+    - Create model Worker
+    - Create model Order
+    - Create model FoodIngredient
+    - Add field ingredients to food
+    - Add field user to client
+
+(venv) C:\Users\ataja\Desktop\FLASK ALL\django_models>python manage.py makemigrations
+Migrations for 'restaurant':
+  restaurant\migrations\0002_remove_order_ingredient_order_ingredient.py
+    - Remove field ingredient from order
+    - Add field ingredient to order
+
+(venv) C:\Users\ataja\Desktop\FLASK ALL\django_models>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, restaurant, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying admin.0003_logentry_add_action_flag_choices... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying auth.0009_alter_user_last_name_max_length... OK
+  Applying auth.0010_alter_group_name_max_length... OK
+  Applying auth.0011_update_proxy_permissions... OK
+  Applying auth.0012_alter_user_first_name_max_length... OK
+  Applying restaurant.0001_initial... OK
+  Applying restaurant.0002_remove_order_ingredient_order_ingredient... OK
+  Applying sessions.0001_initial... OK
+
+>>> from restaurant.models import *
+>>> user1 = User.objects.create(username="nikname21@gmail.com", password="defender42")
+>>> client1 = Client.objects.create(name="Азат Соколов", card_number="4147565798789009", user=user1)
+>>> user2 = User.objects.create(username="altywa1998@gmail.com", password="nono34")
+>>> worker1 = Worker.objects.create(name="Алтынай Алиева", position="Кассир", user=user2)
+>>> food1 = Food.objects.create(name="Шаурма", start_price="50")
+>>> food2 = Food.objects.create(name="Гамбургер", start_price="25")
+
+>>> ingr1 = Ingredient.objects.create(name="Курица", extra_price="70")
+>>> ingr2 = Ingredient.objects.create(name="Говядина", extra_price="80")
+>>> ingr3 = Ingredient.objects.create(name="Салат", extra_price="15")
+>>> ingr4 = Ingredient.objects.create(name="Фри", extra_price="15")
+>>> order1 = Order.objects.create(food=food1, worker=worker1, client=client1)
+>>> ingr5 = Ingredient.objects.create(name="Сыр", extra_price="10")
+>>> order1.ingredient.add(ingr2, ingr5, ingr3, ingr4)
+>>> order2 = Order.objects.create(food=food2, worker=worker1, client=client1)
+>>> order2.ingredient.add(ingr1, ingr3)
+>>> food_price1 = Order.objects.get(id="1")
+>>> food_price1.food.start_price
+50
+>>> food_price2 = Order.objects.get(id="2")
+>>> food_price2.food.start_price
+25
+>>> food_price2.full_price()
+110
+>>> food_price1.full_price()
+170
+>>>
